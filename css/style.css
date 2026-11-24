@@ -1,0 +1,347 @@
+/* ==========================================================
+   Liv Meysman — Portfolio
+   ========================================================== */
+
+:root {
+  /* Kleuren */
+  --color-bg: #ffffff;
+  --color-text: #9aa3ad;        /* grijs voor tagline, contact */
+  --color-accent: #1fb7fd;      /* blauw voor naam */
+  --color-placeholder: #2a2a2a; /* achtergrond zolang beeld laadt */
+
+  /* Typografie — naam van de font-family vind je in je Adobe Fonts web project */
+  --font-serif: "dejanire-text", Georgia, "Times New Roman", serif;
+  --font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-size-base: 1rem;       /* 16px */
+
+  /* Ritme */
+  --site-gutter: 1rem;          /* zijmarge pagina (mobiel) */
+  --grid-gap: 0.75rem;          /* ruimte tussen beelden */
+  --header-space: 4rem;         /* witruimte onder header */
+}
+
+@media (min-width: 768px) {
+  :root {
+    --site-gutter: 1.75rem;      /* ~28px */
+    --header-space: 10rem;
+  }
+}
+
+/* ---------- Basis ---------- */
+/* Pagina verborgen tot alles geladen is (klasse wordt door main.js weggehaald) */
+html.is-loading body { visibility: hidden; }
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: var(--font-size-base);
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+}
+
+em, i { font-style: italic; }
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+a:hover,
+a:focus-visible { color: var(--color-accent); }
+
+/* Zijmarges en gutter voor Bootstrap-grid */
+.px-site {
+  padding-left: var(--site-gutter);
+  padding-right: var(--site-gutter);
+}
+.g-grid {
+  --bs-gutter-x: var(--grid-gap);
+  --bs-gutter-y: var(--grid-gap);
+}
+
+/* ---------- Header ---------- */
+/* Header blijft bovenaan staan tijdens scrollen */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+  background: var(--color-bg);
+  padding-top: 0.875rem;
+  padding-bottom: 0.75rem;
+}
+
+/* Witruimte tussen header en inhoud (scrollt wel mee) */
+.site-main {
+  padding-top: calc(var(--header-space) - 1rem);
+}
+
+.gap-header { column-gap: 3.5rem; row-gap: 0.25rem; }
+
+.site-title {
+  margin: 0;
+  font-size: inherit;
+  font-weight: 400;
+  line-height: inherit;
+}
+
+.site-name { color: var(--color-accent); }
+.site-name:hover { color: var(--color-text); }
+
+.site-nav a {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 1px;
+}
+
+.site-contact {
+  margin: 1.25rem 0 0;
+  font-style: normal;
+}
+
+@media (min-width: 768px) {
+  .site-contact {
+    margin-top: 0;
+    text-align: right;
+  }
+}
+
+/* ---------- Projectgrid ---------- */
+.project-card {
+  display: block;
+  color: inherit;
+}
+
+.project-figure {
+  position: relative;
+  margin: 0;
+  aspect-ratio: 947 / 682;      /* verhouding van de foto's in het ontwerp */
+  overflow: hidden;
+  background: var(--color-placeholder);
+}
+
+.project-figure img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  opacity: 0;
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.project-figure img.is-loaded { opacity: 1; }
+.project-figure img.is-broken { visibility: hidden; }
+
+
+/* Tweede beeld: ligt over het eerste en verschijnt bij hover */
+.project-figure img.project-hover {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: none;   /* geen crossfade: beeld wisselt meteen */
+}
+@media (hover: hover) {
+  .project-card:hover .project-figure img.project-hover.is-loaded,
+  .project-card:focus-visible .project-figure img.project-hover.is-loaded { opacity: 1; }
+}
+
+/* Titel en jaar linksboven op het beeld, in wit, altijd zichtbaar */
+.project-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 0.75rem 0.875rem;
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 0.4em;
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  line-height: 1.3;
+  color: #fff;
+  pointer-events: none;
+}
+.project-title,
+.project-year { color: #fff; }
+
+@media (prefers-reduced-motion: reduce) {
+  .project-figure img,
+  .project-info { transition: none; transform: none; }
+}
+
+/* ---------- Projectdetail ---------- */
+.project-images {
+  display: flex;
+  flex-direction: column;
+  gap: var(--grid-gap);
+}
+.project-images img {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: var(--color-placeholder);
+}
+/* Eerste beeld krijgt via main.js een hoogte zodat beeld 2 al zichtbaar is */
+.project-images img:first-child {
+  object-fit: cover;
+  object-position: center;
+}
+
+.project-text {
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  line-height: 1.3;
+  padding-bottom: 2rem;
+}
+.project-text p { margin: 0 0 1.3em; }
+.project-text p:last-child { margin-bottom: 0; }
+
+/* Titel in de serif, zelfde grootte als de lopende tekst */
+.project-heading {
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.3;
+  margin: 0 0 1.5em;
+}
+
+.project-counter { display: none; }
+
+@media (min-width: 992px) {
+  .project-text {
+    /* margin-top en top worden door main.js berekend:
+       tekst start uitgelijnd met de onderkant van het eerste beeld
+       en blijft daarna onderaan het scherm staan */
+    position: sticky;
+    top: var(--text-sticky-top, 50vh);
+    margin-top: var(--text-offset, 0px);
+    padding: 0 0 0 1.5rem;
+    max-width: 44rem;
+  }
+  .project-counter { display: block; }
+}
+
+/* ---------- Lightbox ---------- */
+.is-zoomable { cursor: zoom-in; }
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3.5rem 4.5rem;       /* ruimte voor pijltjes en sluitknop */
+}
+.lightbox[hidden] { display: none; }
+
+/* Beeld gecentreerd en zo groot mogelijk, zonder bijsnijden */
+.lightbox-img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  cursor: pointer;
+  user-select: none;
+}
+
+.lightbox-btn {
+  position: absolute;
+  background: none;
+  border: 0;
+  padding: 1rem;
+  color: #fff;
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  line-height: 1;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+.lightbox-btn:hover,
+.lightbox-btn:focus-visible { opacity: 1; }
+
+.lightbox-prev  { left: 0.5rem;  top: 50%; transform: translateY(-50%); }
+.lightbox-next  { right: 0.5rem; top: 50%; transform: translateY(-50%); }
+.lightbox-close { right: 0.5rem; top: 0.25rem; }
+
+.lightbox-count {
+  position: absolute;
+  left: 50%;
+  bottom: 0.75rem;
+  transform: translateX(-50%);
+  margin: 0;
+  color: #fff;
+  opacity: 0.7;
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+}
+
+body.lightbox-open { overflow: hidden; }
+
+@media (max-width: 767.98px) {
+  .lightbox { padding: 3.5rem 0.5rem; }
+  .lightbox-prev,
+  .lightbox-next { top: auto; bottom: 0; transform: none; }
+}
+
+/* ---------- About ---------- */
+.about-intro,
+.about-heading {
+  font-size: inherit;
+  font-weight: 400;
+  line-height: inherit;
+  margin: 0;
+}
+
+.about-link,
+.about-link:hover { color: var(--color-accent); }
+.about-link:hover { text-decoration: underline; }
+
+.about-education p { margin: 0; }
+
+.about-left { margin-bottom: 3rem; }
+.about-education { margin-top: 3rem; }
+
+.about-section + .about-section { margin-top: 2.5rem; }
+.about-heading { margin-bottom: 2.5rem; }
+
+/* Datum + omschrijving in twee kolommen */
+.about-list {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  column-gap: 0.5em;
+  margin: 0;
+}
+.about-list dt { font-weight: 400; }
+.about-list dd { margin: 0; }
+
+@media (min-width: 992px) {
+  /* Inhoud onderaan het scherm, zoals in het ontwerp */
+  .page-about .site-main {
+    min-height: calc(100svh - var(--header-h, 7rem));
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: 1.5rem;
+  }
+
+  /* Intro bovenaan, opleiding onderaan de linkerkolom */
+  .about-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-bottom: 0;
+  }
+  .about-education { margin-top: 0; }
+
+  .about-right { padding-left: 1.5rem; }
+}
+
+/* ---------- Footer ---------- */
+.site-footer {
+  padding: 4rem 0 2.5rem;
+  font-size: 0.8125rem;
+}
+.site-footer p { margin: 0; }
