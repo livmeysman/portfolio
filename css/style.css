@@ -145,7 +145,7 @@ a:focus-visible { color: var(--color-accent); }
   .project-card:focus-visible .project-figure img.project-hover.is-loaded { opacity: 1; }
 }
 
-/* Titel en jaar linksboven op het beeld, in wit, altijd zichtbaar */
+/* Titel en jaar onderaan op het beeld, altijd zichtbaar */
 .project-info {
   position: absolute;
   bottom: 0;
@@ -156,13 +156,14 @@ a:focus-visible { color: var(--color-accent); }
   flex-wrap: wrap;
   column-gap: 0.4em;
   font-family: var(--font-sans);
+  font-weight: 500;
   font-size: 0.875rem;
   line-height: 1.3;
-  color: #fff;
+  color: #e6e6e6;
   pointer-events: none;
 }
 .project-title,
-.project-year { color: #fff; }
+.project-year { color: #e6e6e6; }
 
 @media (prefers-reduced-motion: reduce) {
   .project-figure img,
