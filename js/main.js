@@ -45,27 +45,31 @@ document.addEventListener('DOMContentLoaded', () => {
   if (text && images.length) {
     const desktop = window.matchMedia('(min-width: 992px)');
     const header = document.querySelector('.site-header');
+    const main = document.querySelector('.page-project .site-main');
     const first = images[0];
     const peek = () => Math.round(window.innerHeight * 0.06); // hoeveel van beeld 2 zichtbaar is bij laden
 
-    // 1. Eerste beeld zo hoog dat beeld 2 al deels zichtbaar is
-    // 2. Tekst uitlijnen op onderkant eerste beeld en daar sticky laten staan
+    // Behoud de volledige eerste foto en laat een stukje van de volgende zien.
     const layoutText = () => {
       first.style.removeProperty('height');
       text.style.removeProperty('--text-offset');
       text.style.removeProperty('--text-sticky-top');
-      if (!desktop.matches || !first.naturalWidth) return;
+      if (!desktop.matches || !first.naturalWidth || !main) {
+        if (main) main.style.removeProperty('--project-main-padding');
+        return;
+      }
 
-      const top = first.getBoundingClientRect().top + window.scrollY;       // positie beeld in pagina
-      const natural = first.offsetWidth * first.naturalHeight / first.naturalWidth;
-      const available = window.innerHeight - top - peek();
-      const height = Math.round(Math.min(natural, Math.max(available, 240)));
-      first.style.height = height + 'px';
+      const height = first.offsetHeight;
+      const headerHeight = header ? header.offsetHeight : 0;
+      const mainTop = main.getBoundingClientRect().top + window.scrollY;
+      const gap = parseFloat(window.getComputedStyle(first.parentElement).rowGap) || 0;
+      const imageTop = Math.max(headerHeight, window.innerHeight - height - gap - peek());
+      const mainPadding = Math.max(0, imageTop - mainTop);
+      main.style.setProperty('--project-main-padding', mainPadding + 'px');
 
       const textHeight = text.offsetHeight;
-      const headerHeight = header ? header.offsetHeight : 0;
       const offset = Math.max(0, height - textHeight);
-      const stickyTop = Math.max(headerHeight, top + height - textHeight);
+      const stickyTop = Math.max(headerHeight, imageTop + height - textHeight);
       text.style.setProperty('--text-offset', offset + 'px');
       text.style.setProperty('--text-sticky-top', stickyTop + 'px');
     };
